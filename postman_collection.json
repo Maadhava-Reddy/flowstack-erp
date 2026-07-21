@@ -1,0 +1,254 @@
+{
+  "info": {
+    "name": "Mini ERP + CRM API",
+    "description": "Full API collection. Set {{baseUrl}} (default http://localhost:4000). Run 'Login (admin)' first - it saves the token automatically for all other requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000" },
+    { "key": "token", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) pm.collectionVariables.set('token', res.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@erp.com\",\n  \"password\": \"Admin@123\"\n}" },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Login (sales)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) pm.collectionVariables.set('token', res.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"sales@erp.com\",\n  \"password\": \"Sales@123\"\n}" },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Current user (GET /auth/me)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/auth/me" }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "List customers (search + pagination)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/customers?search=&status=&type=&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "status", "value": "" },
+                { "key": "type", "value": "" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get customer detail",
+          "request": { "method": "GET", "url": "{{baseUrl}}/customers/1" }
+        },
+        {
+          "name": "Create customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test Customer\",\n  \"mobile\": \"9998887776\",\n  \"email\": \"test@customer.in\",\n  \"business_name\": \"Test Traders\",\n  \"gst_number\": \"\",\n  \"customer_type\": \"WHOLESALE\",\n  \"address\": \"MG Road, Pune\",\n  \"status\": \"LEAD\",\n  \"follow_up_date\": \"\",\n  \"notes\": \"Created from Postman\"\n}" },
+            "url": "{{baseUrl}}/customers"
+          }
+        },
+        {
+          "name": "Update customer",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test Customer Updated\",\n  \"mobile\": \"9998887776\",\n  \"customer_type\": \"WHOLESALE\",\n  \"status\": \"ACTIVE\"\n}" },
+            "url": "{{baseUrl}}/customers/1"
+          }
+        },
+        {
+          "name": "Add follow-up note",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"note\": \"Called customer, order expected next week\",\n  \"next_date\": \"2026-08-01\"\n}" },
+            "url": "{{baseUrl}}/customers/1/follow-ups"
+          }
+        },
+        {
+          "name": "Create customer - validation error (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"A\",\n  \"mobile\": \"12\"\n}" },
+            "url": "{{baseUrl}}/customers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products & Stock",
+      "item": [
+        {
+          "name": "List products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/products?search=&low_stock=&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "low_stock", "value": "" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Tea Powder 5kg\",\n  \"sku\": \"TEA-05\",\n  \"category\": \"Beverages\",\n  \"unit_price\": 1450,\n  \"current_stock\": 30,\n  \"min_stock\": 5,\n  \"location\": \"WH-A / Rack 6\"\n}" },
+            "url": "{{baseUrl}}/products"
+          }
+        },
+        {
+          "name": "Update product",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Tea Powder 5kg\",\n  \"sku\": \"TEA-05\",\n  \"category\": \"Beverages\",\n  \"unit_price\": 1499,\n  \"min_stock\": 8,\n  \"location\": \"WH-A / Rack 6\"\n}" },
+            "url": "{{baseUrl}}/products/1"
+          }
+        },
+        {
+          "name": "List stock movements",
+          "request": { "method": "GET", "url": "{{baseUrl}}/stock-movements?page=1&limit=15" }
+        },
+        {
+          "name": "Record stock IN",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": 1,\n  \"quantity\": 50,\n  \"movement_type\": \"IN\",\n  \"reason\": \"Purchase order received\"\n}" },
+            "url": "{{baseUrl}}/stock-movements"
+          }
+        },
+        {
+          "name": "Record stock OUT - insufficient stock (422)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": 1,\n  \"quantity\": 999999,\n  \"movement_type\": \"OUT\",\n  \"reason\": \"Testing negative stock guard\"\n}" },
+            "url": "{{baseUrl}}/stock-movements"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales Challans",
+      "item": [
+        {
+          "name": "List challans",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/challans?status=&search=&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans"],
+              "query": [
+                { "key": "status", "value": "" },
+                { "key": "search", "value": "" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get challan detail",
+          "request": { "method": "GET", "url": "{{baseUrl}}/challans/1" }
+        },
+        {
+          "name": "Create challan (DRAFT)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"customer_id\": 1,\n  \"status\": \"DRAFT\",\n  \"items\": [\n    { \"product_id\": 1, \"quantity\": 5 },\n    { \"product_id\": 2, \"quantity\": 2 }\n  ]\n}" },
+            "url": "{{baseUrl}}/challans"
+          }
+        },
+        {
+          "name": "Create challan (CONFIRMED - reduces stock)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"customer_id\": 1,\n  \"status\": \"CONFIRMED\",\n  \"items\": [\n    { \"product_id\": 1, \"quantity\": 3 }\n  ]\n}" },
+            "url": "{{baseUrl}}/challans"
+          }
+        },
+        {
+          "name": "Create challan - insufficient stock (422)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"customer_id\": 1,\n  \"status\": \"CONFIRMED\",\n  \"items\": [\n    { \"product_id\": 1, \"quantity\": 999999 }\n  ]\n}" },
+            "url": "{{baseUrl}}/challans"
+          }
+        },
+        {
+          "name": "Confirm draft challan",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/challans/1/confirm" }
+        },
+        {
+          "name": "Cancel challan (restores stock if confirmed)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/challans/1/cancel" }
+        }
+      ]
+    }
+  ]
+}

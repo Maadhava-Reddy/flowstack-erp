@@ -1,0 +1,40 @@
+# One-command local setup: docker compose up --build
+# Then run once in another terminal to create tables + seed users:
+#   docker compose exec backend sh -c "apk add --no-cache postgresql-client && psql \"$DATABASE_URL\" -f db/schema.sql"
+#   docker compose exec backend node -e "require('child_process')" # (or run npm run db:seed locally)
+# Simpler path: run schema+seed from your host with npm (see README).
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: flowstack_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://postgres:postgres@db:5432/flowstack_db
+      DATABASE_SSL: "false"
+      JWT_SECRET: docker-dev-secret-change-me
+      JWT_EXPIRES_IN: 8h
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
