@@ -6,6 +6,24 @@ A small ERP/CRM system for a wholesale/distribution company. Internal employees 
 
 ---
 
+## 🚀 Live Deployment & Links
+
+- **Live Backend API**: [https://flowstack-erp.onrender.com](https://flowstack-erp.onrender.com)
+- **Live API Health Check**: [https://flowstack-erp.onrender.com/health](https://flowstack-erp.onrender.com/health)
+- **Database**: Hosted PostgreSQL on [Neon.tech](https://neon.tech)
+- **GitHub Repository**: [https://github.com/Maadhava-Reddy/flowstack-erp](https://github.com/Maadhava-Reddy/flowstack-erp)
+
+### Test Credentials (All Roles)
+
+| Role | Email | Password | Permissions |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@erp.com` | `Admin@123` | Full access across all modules |
+| **Sales** | `sales@erp.com` | `Sales@123` | Customers CRM & Sales Challans |
+| **Warehouse** | `warehouse@erp.com` | `Warehouse@123` | Products & Stock Movements (IN/OUT) |
+| **Accounts** | `accounts@erp.com` | `Accounts@123` | Financial records & Challan viewing |
+
+---
+
 ## 1. Architecture overview
 
 ```
