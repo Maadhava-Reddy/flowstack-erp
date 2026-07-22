@@ -12,8 +12,11 @@ import { errorHandler } from "./middleware/error";
 
 const app = express();
 
-const origins = (process.env.CORS_ORIGINS || "http://localhost:5173").split(",").map(s => s.trim());
-app.use(cors({ origin: origins }));
+const corsOrigin = !process.env.CORS_ORIGINS || process.env.CORS_ORIGINS === "*"
+  ? true
+  : process.env.CORS_ORIGINS.split(",").map(s => s.trim());
+
+app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(express.json());
 
 app.get("/health", (_req, res) => res.json({ ok: true, service: "flowstack-api" }));
