@@ -14,8 +14,8 @@ graph TD
     API[Express TypeScript API - Railway]
     DB[(PostgreSQL DB - Supabase)]
     
-    Client -- HTTP JSON Requests / JWT Auth --> API
-    API -- pg driver / SQL Queries --> DB
+    Client -->|HTTP JSON Requests / JWT Auth| API
+    API -->|pg driver / SQL Queries| DB
 ```
 
 - **Frontend**: A client-side React app bundled via Vite. It uses **React Router DOM** for routing and a lightweight custom fetch wrapper to communicate with the backend. User state is persisted in `localStorage`.
@@ -69,7 +69,7 @@ erDiagram
         int id PK
         varchar name
         varchar email UK
-        varchar role "ADMIN, SALES, WAREHOUSE, ACCOUNTS"
+        varchar role
     }
     
     customers {
@@ -81,15 +81,15 @@ erDiagram
         varchar customer_type
         varchar status
         date follow_up_date
-        int created_by FK "-> users.id"
+        int created_by FK
     }
     
     follow_ups {
         int id PK
-        int customer_id FK "-> customers.id"
+        int customer_id FK
         text note
         date next_date
-        int created_by FK "-> users.id"
+        int created_by FK
     }
 
     products {
@@ -103,28 +103,28 @@ erDiagram
 
     stock_movements {
         int id PK
-        int product_id FK "-> products.id"
+        int product_id FK
         int quantity
-        varchar movement_type "IN, OUT"
+        varchar movement_type
         varchar reason
-        int created_by FK "-> users.id"
+        int created_by FK
     }
 
     challans {
         int id PK
         varchar challan_number UK
-        int customer_id FK "-> customers.id"
+        int customer_id FK
         jsonb customer_snapshot
-        varchar status "DRAFT, CONFIRMED, CANCELLED"
+        varchar status
         int total_quantity
         decimal total_amount
-        int created_by FK "-> users.id"
+        int created_by FK
     }
     
     challan_items {
         int id PK
-        int challan_id FK "-> challans.id"
-        int product_id FK "-> products.id"
+        int challan_id FK
+        int product_id FK
         varchar product_name
         varchar sku
         decimal unit_price
