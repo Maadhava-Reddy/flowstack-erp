@@ -1,16 +1,18 @@
 # FlowStack — Operations Portal (ERP + CRM)
 
-A small ERP/CRM system for a wholesale/distribution company. Internal employees (Admin, Sales, Warehouse, Accounts) manage customers, products, stock, and sales challans through role-based access.
+A full-stack ERP/CRM system for a wholesale/distribution company. Internal employees (Admin, Sales, Warehouse, Accounts) manage customers, products, stock, and sales challans through role-based access. Features a premium dark UI with glassmorphism design, smooth animations, and an indigo-violet accent system.
 
-**Stack:** Node.js · TypeScript · Express · PostgreSQL · React (Vite) · JWT auth
+**Stack:** Node.js · TypeScript · Express · PostgreSQL · React (Vite) · JWT auth  
+**Deployed:** Vercel (frontend) · Railway (backend) · Supabase (database)
 
 ---
 
 ## 🚀 Live Deployment & Links
 
-- **Live Backend API**: [https://flowstack-erp.onrender.com](https://flowstack-erp.onrender.com)
-- **Live API Health Check**: [https://flowstack-erp.onrender.com/health](https://flowstack-erp.onrender.com/health)
-- **Database**: Hosted PostgreSQL on [Neon.tech](https://neon.tech)
+- **Live App (Frontend)**: [https://flowstack-erp.vercel.app](https://flowstack-erp.vercel.app)
+- **Live Backend API**: [https://flowstack-erp-production.up.railway.app](https://flowstack-erp-production.up.railway.app)
+- **Live API Health Check**: [https://flowstack-erp-production.up.railway.app/health](https://flowstack-erp-production.up.railway.app/health)
+- **Database**: Hosted PostgreSQL on [Supabase](https://supabase.com)
 - **GitHub Repository**: [https://github.com/Maadhava-Reddy/flowstack-erp](https://github.com/Maadhava-Reddy/flowstack-erp)
 
 ### Test Credentials (All Roles)
